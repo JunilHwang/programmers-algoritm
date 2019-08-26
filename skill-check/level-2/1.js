@@ -3,19 +3,19 @@ function solution(s) {
     const obj = {}
     arr.forEach(v => obj[v] = obj[v] ? obj[v] + 1 : 1)
     if (Object.values(obj).find(v => v % 2 !== 0)) return 0
-    for (let i = 0, len = arr.length, k = 0; i < len; i++) {
-        if (arr[k] === arr[k + 1]) {
-            arr.splice(k, 2)
-        } else if (arr[k - 1] === arr[k]) {
-            arr.splice(k - 1, 2)
-            k--
+    
+    let chk = 0
+    for (let i = 0, len = arr.length, x = 0, y = 1; i < len; i++) {
+        if (x >= 0 && y < len && arr[x] === arr[y]) {
+            arr[x--] = arr[y++] = null
+            while(arr[x] === null) x--
+            while(arr[y] === null) y++
+            chk += 2
         } else {
-            k++
+            x = y++
         }
-        if (k === arr.length || arr.length === 0) break
     }
-    return arr.length ? 0 : 1;
+    return arr.length === chk ? 1 : 0;
 }
-console.log(solution("baaabbaacddcab"))
 console.log(solution("baabaa"))
 console.log(solution("cdcd"))
