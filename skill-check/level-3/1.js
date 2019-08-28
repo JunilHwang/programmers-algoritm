@@ -1,25 +1,23 @@
 function solution(N, road, K) {
     var answer = 1;
     const path = []
-    let min
     const shortest = (end, p, t) => {
+        if (path[end] && path[end].t < t) return
         const last = p.slice(-1)[0]
-        if (last === end && t <= min) {
-            min = t
-            path[end] = {p, t}
-        }
-        road.forEach(v => {
+        if (last === end) path[end] = {p, t}
+        for (let i = 0, len = road.length; i < len; i++) {
+            const v = road[i]
             if (v[0] === last && p.indexOf(v[1]) === -1) {
                 shortest(end, [...p, v[1]], t + v[2])
             } else if (v[1] === last && p.indexOf(v[0]) === -1) {
                 shortest(end, [...p, v[0]], t + v[2])
             }
-        })
+        }
     }
     for (let i = 2; i <= N; i++) {
-        min = Infinity
         shortest(i, [1], 0)
     }
+    console.log(path)
     return path.filter(v => v.t <= K).length + 1;
 }
 
