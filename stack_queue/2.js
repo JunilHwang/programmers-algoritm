@@ -16,9 +16,9 @@ function solution(h) {
   while (h.length) {
     const target = h.pop()
     let r = 0
-    for (let i = h.length - 1; i > 0; i--) {
+    for (let i = h.length - 1; i >= 0; i--) {
       if (h[i] > target) {
-        r = i+1
+        r = i + 1
         break;
       }
     }
@@ -30,3 +30,4 @@ function solution(h) {
 console.log(solution([6,9,5,7,4]))
 console.log(solution([3,9,9,3,5,7,2]))
 console.log(solution([1,5,3,6,7,6,5]))
+console.log(solution([5,1,3,6,7,6,5]))
