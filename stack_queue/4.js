@@ -1,23 +1,19 @@
 // https://programmers.co.kr/learn/courses/30/lessons/42583?language=javascript
 function solution(bridge_length, w, ws) {
-    let num = 0;
-    let sum = 0
+    let num = 0, sum = 0
     const queue = []
-    const timer = []
     while (ws.length) {
       num += 1
-      if (timer.length && timer[0] === num) {
-        timer.shift()
-        sum -= queue.shift()
+      if (queue.length && queue[0].t === num) {
+        sum -= queue.shift().w
       }
       if (sum + ws[0] <= w) {
-        const target = ws.shift()
-        queue.push(target)
-        timer.push(num + bridge_length)
-        sum += target
+        const w = ws.shift()
+        queue.push({w, t: num + bridge_length})
+        sum += w
       }
     }
-    return timer.pop();
+    return queue.pop().t;
 }
 
 console.log(solution(2, 10, [7,4,5,6]))
