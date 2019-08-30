@@ -4,7 +4,7 @@ function solution(jobs) {
   jobs.sort((a, b) => a[0] === b[0] ? a[1] - b[1] : a[0] - b[0])
   let total = jobs.length, job = jobs.shift(), t = job[0], sum = 0
   const q = []
-  while (jobs.length + q.length) {
+  while (true) {
     while (jobs.length && t >= jobs[0][0]) {
       q.push(jobs.shift())
       if (q.length > 1) q.sort((a, b) => a[1] - b[1])
@@ -13,6 +13,7 @@ function solution(jobs) {
     if (job) {
       sum += (t += job[1]) - job[0]
       job = null
+      if (jobs.length + q.length === 0) break
     } else t += 1
   }
   return ~~(sum / total)
