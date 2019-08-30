@@ -6,9 +6,9 @@
 # 밀가루가 떨어지지 않고 공장을 운영하기 위해서 최소한 몇 번 해외 공장으로부터 밀가루를 공급받아야 하는지
 from heapq import heappush as push, heappop as pop
 
-# 테스트 1 〉	통과 (2.59ms, 22.3MB)
-# 테스트 2 〉	통과 (0.54ms, 18.3MB)
-# 테스트 3 〉	통과 (0.85ms, 11.8MB)
+# 테스트 1 〉	통과 (2.25ms, 22.3MB)
+# 테스트 2 〉	통과 (0.53ms, 18.1MB)
+# 테스트 3 〉	통과 (0.74ms, 11.7MB)
 def solution(stock, d, s, k):
     h = []
     d += [k]
@@ -21,21 +21,5 @@ def solution(stock, d, s, k):
             stock -= pop(h)
             cnt += 1
             if stock >= k : return cnt
-
-# 테스트 1 〉	통과 (2.99ms, 22.3MB)
-# 테스트 2 〉	통과 (0.63ms, 18.1MB)
-# 테스트 3 〉	통과 (1.02ms, 11.8MB)
-def solution2(stock, d, s, k):
-    h = []
-    d += [k]
-    s += [0]
-    cnt = i = 0
-    for now in d :
-        push(h, -s[i])
-        while stock - now <= 0 :
-            stock -= pop(h)
-            cnt += 1
-        if stock - now >= k - now : return cnt
-        i+= 1
 
 print(solution(4, [4, 10, 15], [20, 5, 10], 30))
