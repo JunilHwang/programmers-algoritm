@@ -1,53 +1,23 @@
 // https://programmers.co.kr/learn/courses/30/lessons/42628
-function solution(operations) {
-  const len = operations.length
-  const answer = [], arr = [];
-  let i = 0, min = 0, max = 0, minKey = [], maxKey = [], cnt = 0, arrLast = 0
-  while (i < len) {
-    let [command, n] = operations[i++].split(' ')
-    n *= 1
-    if (command === 'I') {
-      //console.log('insert')
-      arr.push(n)
-      if (cnt === 0) min = max = n
-      if (n <= min) {
-        minKey.push(arrLast)
-        min = n
-      }
-      if (n >= max) {
-        maxKey.push(arrLast)
-        max = n
-      }
-      arrLast++, cnt++
-    } else {
-      //console.log('delete ', n)
-      if (cnt > 0) {
-        let key = 0
-        const [targetKey, target] = n === 1 ? [maxKey, max] : [minKey, min]
-        while (true) {
-          key = targetKey.pop()
-          if (arr[key] === target) {
-            const next = targetKey.pop()
-            if (next === undefined) {
-              min = max = 0
-            } else {
-              if (n === 1) {
-                max = arr[next]
-              } else {
-                min = arr[next]
-              }
-              targetKey.push(next)
-            }
-            break
-          }
-        }
-        arr[key] = undefined
-        cnt -= 1
-      }
-    }
-    //console.log(n, arr, min, max, minKey, maxKey, cnt)
+class Heap {
+  constructor () { this.v = [] }
+  push (n) {
+    this.v.push(n)
+    this.v.sort((a, b) => a - b)
   }
-  return cnt === 0 ? [0, 0] : [max, min];
+  pop (type) { type === 1 ? this.v.pop() : this.v.shift() }
+  getMax (len = this.v.length) { return len ? this.v[len - 1] : 0 }
+  getMin (len = this.v.length) { return len ? this.v[0] : 0 }
+}
+
+function solution (operations) {
+  const len = operations.length, heap = new Heap();
+  let i = 0
+  while (i < len) {
+    const [command, n] = operations[i++].split(' ')
+    command === 'I' ? heap.push(~~n) : heap.pop(n*1)
+  }
+  return [heap.getMax(), heap.getMin()];
 }
 
 console.log(solution(["I 16", "I -5643", "D -1", "D 1", "D 1", "I 123", "D -1"]), [0, 0])
