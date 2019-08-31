@@ -11,12 +11,8 @@ class Heap {
 }
 
 function solution (operations) {
-  const len = operations.length, heap = new Heap();
-  let i = 0
-  while (i < len) {
-    const [command, n] = operations[i++].split(' ')
-    command === 'I' ? heap.push(~~n) : heap.pop(n*1)
-  }
+  const heap = new Heap();
+  operations.forEach(v => { const [command, n] = v.split(' '); command === 'I' ? heap.push(~~n) : heap.pop(n*1) })
   return [heap.getMax(), heap.getMin()];
 }
 
