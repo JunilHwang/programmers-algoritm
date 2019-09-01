@@ -2,14 +2,24 @@
 
 function solution(baseball) {
   const arr = baseball.filter(([x, y, z]) => y + z > 0)
-  const f = ([a1, a2, a3], b, stack) => {
-    if (stack.length === arr.length) {
-      if (a1[0] !== undefined && a2[0] !== undefined && a3[0] !== undefined) {
-        console.log(a1, a2, a3, b)
-      }
+  const len = arr.length
+  const stack = []
+  let answer = 0
+  const f = ([a1, a2, a3], b, k) => {
+    if (k === arr.length) {
+      (a1.length ? a1 : b).forEach(v1 => {          
+        (a2.length ? a2 : b).forEach(v2 => {
+          (a3.length ? a3 : b).forEach(v3 => {
+            const n = `${v1}${v2}${v3}`*1
+            if (stack.indexOf(n) !== -1) return
+            f2(n)
+            stack.push(n)
+          })
+        })
+      })
       return
     }
-    const [x, y, z] = arr[stack.length]
+    const [x, y, z] = arr[k]
     const xArr = Array.from(x+'')
     const bArr = []
     switch (z) {
@@ -21,25 +31,43 @@ function solution(baseball) {
     bArr.forEach(b => {
       switch (y) {
         case 0 :
-          f([[...a1], [...a2], [...a3]], b, [...stack, x])
+          f([[...a1], [...a2], [...a3]], b, k+1)
         break;
         case 1 :
-          f([[...a1, xArr[0]], [...a2], [...a3]], b, [...stack, x])
-          f([[...a1], [...a2, xArr[1]], [...a3]], b, [...stack, x])
-          f([[...a1], [...a2], [...a3, xArr[2]]], b, [...stack, x])
+          f([[...a1, xArr[0]], [...a2], [...a3]], b, k+1)
+          f([[...a1], [...a2, xArr[1]], [...a3]], b, k+1)
+          f([[...a1], [...a2], [...a3, xArr[2]]], b, k+1)
         break;
         case 2 :
-          f([[...a1, xArr[0]], [...a2, xArr[1]], [...a3]], b, [...stack, x])
-          f([[...a1, xArr[0]], [...a2], [...a3, xArr[2]]], b, [...stack, x])
-          f([[...a1], [...a2, xArr[1]], [...a3, xArr[2]]], b, [...stack, x])
+          f([[...a1, xArr[0]], [...a2, xArr[1]], [...a3]], b, k+1)
+          f([[...a1, xArr[0]], [...a2], [...a3, xArr[2]]], b, k+1)
+          f([[...a1], [...a2, xArr[1]], [...a3, xArr[2]]], b, k+1)
         break;
         case 3 :
-          f([[...a1, xArr[0]], [...a2, xArr[1]], [...a3, xArr[2]]], b, [...stack, x]);
+          f([[...a1, xArr[0]], [...a2, xArr[1]], [...a3, xArr[2]]], b, k+1);
         break;
       }
     })
   }
-  f([[], [], []], [], [])
+  const f2 = n => {
+    const nArr = Array.from(n+'')
+    for (const [x, y, z] of arr) {
+      const xArr = Array.from(x+'')
+      let yChk = 0, zChk = 0
+      for (let i = 0; i < 3; i++) {
+        if (xArr[i] === nArr[i]) yChk++;
+      }
+      if (yChk !== y) return
+      for (let i = 0; i < 3; i++) {
+        if (xArr.indexOf(nArr[i]) !== -1) zChk++;
+      }
+      if (zChk < z) return
+    }
+    //console.log(n)
+    answer++
+  }
+  f([[], [], []], [], 0)
+  return answer
 }
 
 console.log(solution([[123, 1, 1], [356, 1, 0], [327, 2, 0], [489, 0, 1]]), 2)
