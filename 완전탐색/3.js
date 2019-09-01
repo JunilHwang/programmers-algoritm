@@ -11,31 +11,14 @@ function solution(baseball) {
   let answer = 0
   const f = ([a1, a2, a3], b, k) => {
     if (k >= len) {
-      (a1.length ? a1 : b).forEach(v1 => {          
-        (a2.length ? a2 : b).forEach(v2 => {
-          (a3.length ? a3 : b).forEach(v3 => {
-            const nums = [`${v1}${v2}${v3}`*1]
-            const blen = b.length
-            if (blen >= 1) {
-              b.forEach(b1 => nums.push(`${b1}${v2}${v3}`*1, `${v1}${b1}${v3}`*1, `${v1}${v2}${b1}`*1))
-            }
-            if (blen >= 2) {
-              b.forEach(b1 => b.forEach(b2 => {
-                if (b1 !== b2) nums.push(`${b1}${b2}${v3}`*1, `${b1}${v2}${b2}`*1, `${v1}${b1}${b2}`*1)
-              }))
-            }
-            if (blen === 3) {
-              b.forEach(b1 => b.forEach(b2 => b.forEach(b3 => {
-                if (b1 !== b2 && b1 !== b3 && b2 === b3) nums.push(`${b1}${b2}${b3}`*1)
-              })))
-            }
-            nums.forEach(n => {
-              if (stack.indexOf(n) !== -1) return
-              f2(n)
-              stack.push(n)
-            })
-          })
-        })
+      console.log(a1, a2, a3, b)
+      a1.forEach(v1 => {
+        a2.forEach(v2 => (a3.forEach(v3 => f2(`${v1}${v2}${v3}`*1)), b.forEach(v3 => f2(`${v1}${v2}${v3}`*1))))
+        b.forEach(v2 => (a3.forEach(v3 => f2(`${v1}${v2}${v3}`*1)), b.forEach(v3 => f2(`${v1}${v2}${v3}`*1))))
+      })
+      b.forEach(v1 => {
+        a2.forEach(v2 => (a3.forEach(v3 => f2(`${v1}${v2}${v3}`*1)), b.forEach(v3 => f2(`${v1}${v2}${v3}`*1))))
+        b.forEach(v2 => (a3.forEach(v3 => f2(`${v1}${v2}${v3}`*1)), b.forEach(v3 => f2(`${v1}${v2}${v3}`*1))))
       })
       return
     }
@@ -69,7 +52,9 @@ function solution(baseball) {
       }
     })
   }
-  const f2 = n => {
+  const f2 = (nStr, n = nStr * 1) => {
+    if (stack.indexOf(n) !== -1) return
+    stack.push(n)
     const nArr = Array.from(n+'')
     for (const [x, y, z] of arr) {
       const xArr = Array.from(x+'')
