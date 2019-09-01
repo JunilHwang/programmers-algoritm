@@ -4,7 +4,7 @@ function solution(numbers) {
   const answer = new Set();
   const f = n => {
     if (n < 2) return false
-    for (let i = 2; i < n / 2; i++) if (n % i === 0) return false
+    for (let i = 2; i <= ~~(n / 2); i++) if (n % i === 0) return false
     return true
   }
   const len = arr.length
@@ -15,9 +15,8 @@ function solution(numbers) {
     arr.forEach((v, k) => {if (p.indexOf(k) === -1) f2([...p, k])})
   }
   arr.forEach((v, k) => f2([k]))
-  console.log(answer)
   return answer.size;
 }
 
 console.log(solution("17"), 3)
-//console.log(solution("011"), 2)
+console.log(solution("011"), 2)
