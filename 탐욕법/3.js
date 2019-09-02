@@ -5,11 +5,10 @@ function solution (number, k) {
   let n = 0, i = 0
   while (n < k) {
     if (nums[i] === nums[i + 1]) { i++; continue; }
-    if (nums[i] > nums[i + 1]) {
-      const n1 = `${nums[i]}${nums[i+1]}`*1
-      const n2 = `${nums[i]}${nums[i+2]}`*1
-      nums.splice(n1 < n2 ? i+1 : i+2, 1)
-    } else nums.splice(0, 1)
+    nums.splice(
+      nums[i] > nums[i+1]
+      ? (nums[i+1] < nums[i+2] ? i+1 : i+2)
+      : 0, 1)
     n++
   }
   return nums.join('')
