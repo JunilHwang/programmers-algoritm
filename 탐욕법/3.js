@@ -2,15 +2,14 @@
 
 function solution (nums, k) {
   const last = nums.length, len = last - k
-  let left = 0, n = nums.substr(left, len), max = n, maxLeft = 0, num = ""
+  let left = 0, maxLeft = 0, num = ""
   for (let i = 0; i < len; i++) {
-    max = n = nums.substr(left, len - i)
-    do {
-      if (max[0] < n[0]) max = n, maxLeft = left
-      n = nums.substr(++left, len - i)
-    } while (n.length === len - i)
-    num += max[0]
-    left = ++maxLeft
+    let max = nums[left]
+    while (left <= last - len + i) {
+      if (max < nums[left]) max = nums[left], maxLeft = left
+      left++
+    }
+    num += max, left = ++maxLeft
   }
   return num
 }
