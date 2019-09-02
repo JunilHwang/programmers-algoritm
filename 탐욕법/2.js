@@ -1,7 +1,6 @@
 // https://programmers.co.kr/learn/courses/30/lessons/42860?language=javascript
 
 function solution(name) {
-  var answer = 0;
   const now = [],
         last = [],
         rmd = [],
@@ -14,27 +13,32 @@ function solution(name) {
     last.push(code)
     rmd.push(code === 0)
   })
-  let cnt = 0
-  const f = (n, p, now, rmd) => {
-    if (++cnt >= 100) return
-    if (last[p] !== now[p]) {
+  let min = Infinity
+  const f = (n, p, nowTmp, rmdTmp) => {
+    if ( n > min ) return
+    if (last[p] !== nowTmp[p]) {
       const tmp1 = last[p]
       const tmp2 = zCode - last[p] + 1
       const tmp = tmp1 < tmp2 ? tmp1 : tmp2
-      now[p] = last[p]
-      rmd[p] = true
+      nowTmp[p] = last[p]
+      rmdTmp[p] = true
       n += tmp
     }
-    console.log(n, p, rmd.find(v => !v))
-    if (rmd.find(v => !v) === undefined) {
-      console.log(n, now, last, rmd)
-    } else {
-      f(n+1, (p + 1) % len, [...now], [...rmd])
-      f(n+1, (p === 0 ? len : p) - 1 , [...now], [...rmd])
+    if (rmdTmp.find(v => !v) === undefined) {
+      min = n
+      return
+    }
+    for (let i = 1, j = p + 1; i < len; i++, j++) {
+      if (j >= len) j = 0
+      if (!rmdTmp[j]) {f(n + i, j, [...nowTmp], [...rmdTmp]); break;}
+    }
+    for (let i = 1, j = p - 1; i < len; i++, j--) {
+      if (j < 0) j = len - 1
+      if (!rmdTmp[j]) { f(n + i, j, [...nowTmp], [...rmdTmp]); break; }
     }
   }
   f(0, 0, [...now], [...rmd])
-  return answer;
+  return min;
 }
 
 console.log(solution("JEROEN"), 56)
