@@ -1,15 +1,20 @@
 // https://programmers.co.kr/learn/courses/30/lessons/42883?language=javascript
 
 function solution (nums, k) {
+  const arr = Array.from(nums)
   const last = nums.length, len = last - k
-  let left = 0, maxLeft = 0, num = ""
+  let left = 0, idx = 0, num = ""
   for (let i = 0; i < len; i++) {
     let max = nums[left]
-    while (left <= last - len + i) {
-      if (max < nums[left]) max = nums[left], maxLeft = left
-      left++
+    while (left <= k + i) {
+      const n = nums[left]
+      if (max < n) max = n, idx = left
+      let nextLeft = -1, nextMax = 9
+      while (nextMax > ~~max && nextLeft === -1) nextLeft = nums.indexOf(nextMax--, left+1)
+      if (nextLeft === -1) break
+      left = nextLeft < k + 1 ? nextLeft : left + 1
     }
-    num += max, left = ++maxLeft
+    num += max, left = ++idx
   }
   return num
 }
