@@ -1,26 +1,30 @@
-// 섬연결 : https://programmers.co.kr/learn/courses/30/lessons/42861?language=javascript
+// 탐욕법 > 섬 연결하기 : https://programmers.co.kr/learn/courses/30/lessons/42861?language=javascript
 function solution(n, costs) {
-  costs.sort((a, b) => a[0] - b[0])
+  costs.sort((a, b) => a[2] - b[2])
+  let min = 0, cnt = 0
   const node = [...Array(n).keys()]
-  const min = node.map(v => [])
-  const path = node.map(x => node.map(y => x === y ? 0 : -1))
-  const sum = arr => arr[1] === undefined ? arr[0] : arr.reduce((x, y) => x + y)
-  costs.forEach(([x, y, t]) => { path[x][y] = path[y][x] = t })
-  const f = (k, t, count) => {
-    if (count >= n || sum(min[k]) < sum(t)) return
-    min[k] = t
-    path[k].forEach((v, k2) => {
-      if (v < 1 || k2 === k || k2 === 0) return
-      f(k2, [...t, v], count + 1)
+  const chk = ([x, y]) => {
+    if (node[x] === node[y]) return false
+    const select = node[x] < node[y] ? node[x] : node[y]
+    node.forEach((v, k) => {
+      if ( [node[x], node[y]].indexOf(v) !== -1 ) node[k] = select
     })
+    node[x] = node[y] = select
+    return true
   }
-  path[0].forEach((v, k) => {
-    if (v < 1) return
-    f(k, [v], 0)
-  })
-  let a = 0
-  for (let i = 1; i < n; i++) a += min[i].pop()
-  return a
+  for (const [x, y, t] of costs) {
+    if (!chk([x, y])) continue
+    min += t
+    cnt += 1
+    if (cnt === n) return
+  }
+  return min
 }
 
-console.log(solution(4, [[0, 1, 1], [0, 2, 2], [1, 2, 5], [1, 3, 1], [2, 3, 8]]), 4)
+// console.log(solution(4, [[0, 1, 1], [0, 2, 2], [1, 2, 5], [1, 3, 1], [2, 3, 8]]), 4)
+// console.log(solution(5, [[0, 1, 1], [0, 2, 2], [1, 3, 2], [3, 4, 1]]), 6)
+// console.log(solution(6, [[0, 1, 1], [0, 2, 2], [1, 3, 2], [3, 4, 1], [3, 5, 1], [4, 5, 2]]), 7)
+// console.log(solution(5, [[0,1,1],[0,2,2],[0,3,1],[1,4,1],[1,2,2],[3,4,1]]), 5)
+// console.log(solution(6, [[0, 1, 1], [0, 5, 2], [1, 2, 1], [1, 3, 1], [1, 4, 1], [2, 5, 1]]), 5)
+console.log(solution(6, [[0, 1, 5], [0, 3, 2], [0, 4, 3], [1, 4, 1], [3, 4, 10], [1, 2, 2], [2, 5, 3], [4, 5, 4]]), 11)
+// console.log(solution(4, [[0,1,1],[0,2,2],[2,3,1]]), 4)
