@@ -13,8 +13,8 @@ function solution (office, r, c, move) {
       ([r, c] = tmp)
     }
   }
-  const left = () => direction = direction === 0 ? len - 1 : direction - 1
-  const right = () => direction = (direction + 1) % len
+  const left = () => direction = direction === 0 ? 3 : direction - 1
+  const right = () => direction = (direction + 1) % 4
 
   return move
     .reduce((stack, v) => {
